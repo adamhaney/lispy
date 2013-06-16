@@ -1,0 +1,5 @@
+* Determine syntax exactly (are there commas between arguments?)
+* Determine how python data structures map to lists (and objects, which are just lists)
+* Determine the organization of the lexer and parser
+* Determine how reader macros are going to be implemented
+** (keep the language very simple and use reader macros to layer implementation)
