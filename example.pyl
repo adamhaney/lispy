@@ -4,3 +4,5 @@
 (echo foo)
 (__import__ "os")
 (pow 2 (add 6 6))
+(let df (__init__ DataFrame))
+(mean df)
