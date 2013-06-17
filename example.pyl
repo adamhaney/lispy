@@ -1,2 +1,6 @@
 (let "var" "hello")
 (echo var)
+(let "foo" 7)
+(echo foo)
+(__import__ "os")
+(pow 2 (add 6 6))

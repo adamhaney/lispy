@@ -1,8 +1,10 @@
 #!/usr/bin/python
 
+import re
 import sys
 
 __global_scope__ = {}
+
 
 def echo(str):
     """
@@ -11,6 +13,20 @@ def echo(str):
     """
     print str
 
+def add(lhs, rhs):
+    return lhs + rhs
+
+def subtract(lhs, rhs):
+    return lhs - rhs
+
+def multiply(lhs, rhs):
+    return lhs * rhs
+
+def divide(lhs, rhs):
+    return lhs / rhs
+
+def pow(lhs, rhs):
+    return lhs**rhs
 
 def let(k, v, scope=None):
     """
@@ -49,11 +65,13 @@ def get_variable(k, scope=None):
                     "{}, not available in current scope".format(k)
                     )
 
+
 def pylisp_eval(statement):
     """
     Expects a statement wrapped in parens (arbitrarily nested)
     """
-    tokens = statement[1:-1].split(" ")
+    tokens = re.split(" ", statement[1:-1])
+    print tokens
 
     func_str = tokens[0]
 
@@ -73,4 +91,4 @@ def pylisp_eval(statement):
 
 if "__main__" == __name__:
     for statement in sys.stdin.read().split("\n"):
-        pylisp_eval(statement)
+        print pylisp_eval(statement)
