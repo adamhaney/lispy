@@ -2,45 +2,75 @@
 
 import sys
 
+__global_scope__ = {}
+
 def echo(str):
+    """
+    Creates a print like function for testing. Temporary until I write
+    better parsing.
+    """
     print str
 
-def str2primative(primative_str):
+
+def let(k, v, scope=None):
     """
-    Takes a python primative presented as a string and returns the
-    appropriate python object
+    Implements setting variables
     """
-    return eval(primative_str)
+    if scope is None:
+        scope = __global_scope__
+
+    scope[k] = v
 
 
-def str2function(func_str):
+def get_variable(k, scope=None):
     """
-    Searches code defined in the file and python code to find the
-    function referenced by this name
+    Gets a variable from the given scope, failing that it looks to the
+    global scope
     """
-    return eval(func_str)
+    if scope is None:
+        scope = __global_scope__
 
-def pylisp_eval(code):
-    """
-    Expects a code snipet wrapped in parens (arbitrarily nested)
-    """
-    pieces = code[1:-1].split(" ")
+    try:
 
-    func_str = pieces[0]
+        # Check local scope
+        return scope[k]
 
-    func = str2function(func_str)
+    except KeyError:
+        try:
+
+            # Check global scope
+            return __global_scope__[k]
+        except KeyError:
+            try:
+                # Check python
+                return eval(k)
+            except NameError:
+                raise NameError(
+                    "{}, not available in current scope".format(k)
+                    )
+
+def pylisp_eval(statement):
+    """
+    Expects a statement wrapped in parens (arbitrarily nested)
+    """
+    tokens = statement[1:-1].split(" ")
+
+    func_str = tokens[0]
+
+    func = get_variable(func_str)
 
 
     values = []
-    for evaluatable_piece in pieces[1:]:
+    for evaluatable_piece in tokens[1:]:
         if evaluatable_piece[0] == "(":
             value = pylisp_eval(evaluatable_piece)
         else:
-            value = str2primative(evaluatable_piece)
+            value = get_variable(evaluatable_piece)
         values.append(value)
 
     return func(*values)
     
 
 if "__main__" == __name__:
-    pylisp_eval(sys.stdin.read())
+    for statement in sys.stdin.read().split("\n"):
+        pylisp_eval(statement)

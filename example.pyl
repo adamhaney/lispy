@@ -1,1 +1,2 @@
-(echo "hello")
+(let "var" "hello")
+(echo var)
