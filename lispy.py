@@ -66,28 +66,15 @@ def get_variable(k, scope=None):
                     )
 
 
-def pylisp_eval(statement):
+def lispy_eval(statement):
     """
     Expects a statement wrapped in parens (arbitrarily nested)
     """
-    tokens = re.split(" ", statement[1:-1])
-    print tokens
+    symbol, arguments = statement[1:].split(' ')
 
-    func_str = tokens[0]
-
-    func = get_variable(func_str)
-
-
-    values = []
-    for evaluatable_piece in tokens[1:]:
-        if evaluatable_piece[0] == "(":
-            value = pylisp_eval(evaluatable_piece)
-        else:
-            value = get_variable(evaluatable_piece)
-        values.append(value)
-
-    return func(*values)
-    
+    for char in ''.join(arguments):
+        
+        
 
 if "__main__" == __name__:
     for statement in sys.stdin.read().split("\n"):
