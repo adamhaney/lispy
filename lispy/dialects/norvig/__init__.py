@@ -10,9 +10,6 @@ from __future__ import division
 
 Symbol = str
 
-
-################ eval
-
 def eval(x, env):
     "Evaluate an expression in an environment."
     if isinstance(x, Symbol):             # variable reference
@@ -42,8 +39,6 @@ def eval(x, env):
         exps = [eval(exp, env) for exp in x]
         proc = exps.pop(0)
         return proc(*exps)
-
-################ parse, read, and user interaction
 
 def tokenize(s):
     "Convert a string into a list of tokens."
