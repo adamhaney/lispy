@@ -1,3 +1,0 @@
-LITERAL := "\".*\""
-ATOM := ".*"
-STATEMENT = "\(ATOM [STATEMENT|ATOM|LITERAL]*\)"
