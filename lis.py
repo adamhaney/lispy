@@ -18,7 +18,7 @@ def read(s):
 
 def to_string(exp):
     "Convert a Python object back into a Lisp-readable string."
-    return '('+' '.join(map(to_string, exp))+')' if isa(exp, list) else str(exp)
+    return '('+' '.join(map(to_string, exp))+')' if isinstance(exp, list) else str(exp)
 
 
 def repl(prompt='lis.py> '):
