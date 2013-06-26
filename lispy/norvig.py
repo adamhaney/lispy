@@ -50,15 +50,14 @@ def add_globals(env):
 
 global_env = add_globals(Env())
 
-isa = isinstance
 
 ################ eval
 
 def eval(x, env=global_env):
     "Evaluate an expression in an environment."
-    if isa(x, Symbol):             # variable reference
+    if isinstance(x, Symbol):             # variable reference
         return env.find(x)[x]
-    elif not isa(x, list):         # constant literal
+    elif not isinstance(x, list):         # constant literal
         return x                
     elif x[0] == 'quote':          # (quote exp)
         (_, exp) = x
