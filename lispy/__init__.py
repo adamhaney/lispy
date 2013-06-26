@@ -37,7 +37,7 @@ def repl(prompt='lis.py> '):
         try:
             val = eval(read(raw_input(prompt)), env=global_env)
             if val is not None: print(to_string(val))
-        except Exception, e:
+        except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
 
