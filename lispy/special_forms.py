@@ -24,6 +24,8 @@ NORVIG_FORMS = {
     'list?': lambda x:isa(x,list), 
     'null?':lambda x:x==[],
     'symbol?':lambda x: isa(x, Symbol),
+    'true': True,
+    'false': False
 }
 
 # Grabbing python builtins into lispy, intentionally excluding some of the builtins for now
