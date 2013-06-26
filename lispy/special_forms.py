@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import operator
+
 NORVIG_FORMS = {
     '+':operator.add,
     '-':operator.sub,
@@ -51,7 +53,7 @@ PYTHON_BUILTIN_FORMS = {
     'float': lambda x: float(x),
     'format': lambda value, *args, **kwargs: format(value, *args, **kwargs),
     'frozenset': lambda x: frozenset(x),
-    'getattr': lambda x: obj, name, *args, **kwargs: getattr(obj, name, *args, **kwargs),
+    'getattr': lambda obj, name, *args, **kwargs: getattr(obj, name, *args, **kwargs),
     'globals': globals,
     'hasattr': lambda obj, name: hasattr(obj, name),
     'hash': lambda x: hash(x),
@@ -60,7 +62,7 @@ PYTHON_BUILTIN_FORMS = {
     'id': lambda x: id(x),
     'int': lambda x, *args, **kwargs: int(x, *args, **kwargs),
     'isinstance': lambda obj, classinfo: isinstance(obj, classinfo),
-    'issubclass': lambda class, classinfo: issubclass(class, classinfo),
+    'issubclass': lambda cls, classinfo: issubclass(cls, classinfo),
     'iter': lambda o, *args, **kwargs: iter(o, *args, **kwargs),
     # length is included in norvig scheme
     # list is included in norvig scheme
