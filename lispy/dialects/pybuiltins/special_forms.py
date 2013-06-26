@@ -1,35 +1,8 @@
 from __future__ import print_function
 
-import operator
-
-NORVIG_FORMS = {
-    '+':operator.add,
-    '-':operator.sub,
-    '*':operator.mul,
-    '/':operator.div,
-    'not':operator.not_,
-    '>':operator.gt,
-    '<':operator.lt,
-    '>=':operator.ge,
-    '<=':operator.le,
-    '=':operator.eq, 
-    'equal?':operator.eq,
-    'eq?':operator.is_,
-    'length':len,
-    'cons':lambda x,y:[x]+y,
-    'car':lambda x:x[0],
-    'cdr':lambda x:x[1:],
-    'append':operator.add,  
-    'list':lambda *x:list(x),
-    'list?': lambda x:isa(x,list), 
-    'null?':lambda x:x==[],
-    'symbol?':lambda x: isa(x, Symbol),
-    'true': True,
-    'false': False
-}
 
 # Grabbing python builtins into lispy, intentionally excluding some of the builtins for now
-PYTHON_BUILTIN_FORMS = {
+SPECIAL_FORMS = {
     'exit': exit,
     'abs': lambda x: abs(x),
     'all': lambda x: all(x),
