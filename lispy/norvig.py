@@ -7,7 +7,6 @@ Lispy: Scheme Interpreter in Python
 
 from __future__ import division
 
-import operator
 import importlib
 
 from .special_forms import NORVIG_FORMS, PYTHON_BUILTIN_FORMS
@@ -18,14 +17,14 @@ Symbol = str
 SPECIAL_FORMS = NORVIG_FORMS
 SPECIAL_FORMS.update(PYTHON_BUILTIN_FORMS)
 
-class Env(dict):
-    "An environment: a dict of {'var':val} pairs, with an outer Env."
+class Scope(dict):
+    "A scope: a dict of {'var':val} pairs, with an outer Scope."
     def __init__(self, parms=(), args=(), outer=None):
         self.update(zip(parms,args))
         self.outer = outer
 
     def find(self, var):
-        "Find the innermost Env where var appears."
+        "Find the innermost Scope where var appears."
 
         # If ':' in var add module to environment
         if ":" in var:
@@ -48,7 +47,7 @@ def add_globals(env):
     env.update(SPECIAL_FORMS)
     return env
 
-global_env = add_globals(Env())
+global_env = add_globals(Scope())
 
 
 ################ eval
@@ -73,7 +72,7 @@ def eval(x, env=global_env):
         env[var] = eval(exp, env)
     elif x[0] == 'lambda':         # (lambda (var*) exp)
         (_, vars, exp) = x
-        return lambda *args: eval(exp, Env(vars, args, env))
+        return lambda *args: eval(exp, Scope(vars, args, env))
     elif x[0] == 'begin':          # (begin exp*)
         for exp in x[1:]:
             val = eval(exp, env)
