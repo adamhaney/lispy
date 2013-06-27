@@ -8,7 +8,7 @@ details for parsing, scoping, special forms or types
 
 import argparse
 
-from runtime import Runtime
+from .runtime import Runtime
 
 def cli():
     parser = argparse.ArgumentParser()
