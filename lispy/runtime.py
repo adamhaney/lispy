@@ -67,4 +67,10 @@ class Runtime(object):
         grab the individual pieces of code from a file (the complete
         s-expressions) and evaluate them syncronously
         """
+        try:
+            eval(read(file.read()), env=self.global_env)
+        except Exception as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+            
         

@@ -6,10 +6,20 @@ start the runtime. It should not include implementation
 details for parsing, scoping, special forms or types
 """
 
+import argparse
+
 from runtime import Runtime
 
-def repl():
-    Runtime().repl()
+def cli():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), default=None)
+
+    args = parser.parse_args()
+
+    if args.infile:
+        Runtime().read_file(args.infile)
+    else:
+        Runtime().repl()
 
 if "__main__" == __name__:
-    Runtime().repl()
+    cli()

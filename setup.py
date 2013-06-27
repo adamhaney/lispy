@@ -19,6 +19,6 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    entry_points={'console_scripts': ['lispy=lispy:repl']},
+    entry_points={'console_scripts': ['lispy=lispy:cli']},
     packages=['lispy']
 )
