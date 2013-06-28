@@ -11,6 +11,10 @@ import argparse
 from .runtime import Runtime
 
 def cli():
+    """
+    The function that console_scripts points to for command line
+    evaluation
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), default=None)
 

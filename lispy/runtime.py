@@ -55,22 +55,19 @@ class Runtime(object):
     def repl(self, prompt='lis.py> '):
         "A prompt-read-eval-print loop"
         while True:
-            try:
-                val = eval(read(raw_input(prompt)), env=self.global_env)
-                if val is not None: print(to_string(val))
-            except Exception as e:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                traceback.print_exception(exc_type, exc_value, exc_traceback)
+            val = self.eval(raw_input(prompt))
+            print val
 
     def read_file(self, file):
         """
         grab the individual pieces of code from a file (the complete
         s-expressions) and evaluate them syncronously
         """
+        return self.eval(file.read())
+        
+    def eval(self, str_):
         try:
-            eval(read(file.read()), env=self.global_env)
+            return eval(read(str_), env=self.global_env)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
-            
-        
