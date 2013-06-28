@@ -1,0 +1,55 @@
+(define square (lambda (x) (* x x)))
+
+(define abs (lambda (x) (if (< x 0) (* -1 x) x)))
+
+(define error (lambda (guess actual) (abs (- guess actual))))
+
+(define good-enough? (lambda (guess x)
+                      (<
+                       (error (square guess) x)
+                       0.001)))
+
+(define average (lambda (x y) (/ (+ x y) 2)))
+
+(define improve (lambda (guess x)
+                  (average guess (/ x guess))))
+
+(define sqrt-iter (lambda (guess x)
+                    (if (good-enough? guess x)
+                        guess
+                        (sqrt-iter (improve guess x) x))))
+
+(define sqrt (lambda (x) (sqrt-iter 1.0 x)))
+
+(print (square 3))
+;; 9
+
+(print (abs -3))
+;; 3
+
+(print (abs 0))
+;; 0
+
+(print (abs 2))
+;; 2
+
+(print (error 4 3))
+;; 1
+
+(print (error 3 4))
+;; 1
+
+(print (error 3 3.0001))
+;; 0.0001
+
+(print (good-enough? 4 3))
+;; False
+
+(print (good-enough? 3 9.0001))
+;; True
+
+(print (average 3 9))
+;; 6
+
+(print (sqrt 9))
+;; 3.00009155413
