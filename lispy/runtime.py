@@ -36,7 +36,7 @@ class Repl(cmd.Cmd):
         cmd.Cmd.__init__(self, *args, **kwargs)
 
     def default(self, line):
-        self.runtime.eval(line)
+        print(self.runtime.eval(line))
 
 
 class Runtime(object):
