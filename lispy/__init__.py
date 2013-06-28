@@ -6,6 +6,8 @@ start the runtime. It should not include implementation
 details for parsing, scoping, special forms or types
 """
 
+from __future__ import print_function
+
 import argparse
 
 from .runtime import Runtime
@@ -30,7 +32,7 @@ def cli():
     if args.infile:
         Runtime().read_file(args.infile)
     elif args.c:
-        print Runtime().eval(args.c)
+        print(Runtime().eval(args.c))
     else:
         Runtime().repl()
 
