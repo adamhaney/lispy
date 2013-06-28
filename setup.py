@@ -7,7 +7,7 @@ setup(
     long_description=open('README.md').read(),
     author='Adam Haney',
     author_email='adam.haney@akimbo.io',
-    download_url='https://github.com/adamhaney/lispy/downloads',
+    download_url='https://github.com/adamhaney/lispy',
     tests_require=[
         'nose==1.3.0'
     ],
