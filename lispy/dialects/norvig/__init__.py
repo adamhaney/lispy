@@ -7,6 +7,7 @@ Lispy: Scheme Interpreter in Python
 
 from __future__ import division
 
+from .scope import Scope
 
 Symbol = str
 
@@ -15,7 +16,7 @@ def eval(x, env):
     if isinstance(x, Symbol):             # variable reference
         return env.find(x)[x]
     elif not isinstance(x, list):         # constant literal
-        return x                
+        return x
     elif x[0] == 'quote':          # (quote exp)
         (_, exp) = x
         return exp
