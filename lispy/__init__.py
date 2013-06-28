@@ -16,8 +16,14 @@ def cli():
     evaluation
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), default=None)
-    parser.add_argument('-c')
+    parser.add_argument(
+        'infile',
+        help="A lispy program to read from a script file",
+        nargs='?',
+        type=argparse.FileType('r'),
+        default=None
+    )
+    parser.add_argument('-c', help="lispy program passed in as a string")
 
     args = parser.parse_args()
 
