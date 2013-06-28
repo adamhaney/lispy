@@ -18,3 +18,8 @@ class SimpleTest(TestCase):
         self.assertEquals(
             self.runtime.eval("(list os:environ)"), [os.environ]
         )
+
+    def test_py_builtin_abs(self):
+        self.assertEquals(
+            self.runtime.eval("(py:abs -7)"), 7
+        )
