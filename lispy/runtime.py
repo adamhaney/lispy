@@ -4,6 +4,8 @@ together the various language modules to create a context for running
 some code
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import traceback
@@ -56,7 +58,7 @@ class Runtime(object):
         "A prompt-read-eval-print loop"
         while True:
             val = self.eval(raw_input(prompt))
-            print val
+            print(val)
 
     def read_file(self, file):
         """

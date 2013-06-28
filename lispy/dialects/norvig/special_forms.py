@@ -30,6 +30,7 @@ SPECIAL_FORMS = {
     'list?': lambda x:isa(x,list), 
     'null?':lambda x:x==[],
     'symbol?':lambda x: isa(x, Symbol),
+    'pyeval': lambda x: eval(x),
     'true': True,
     'false': False
 }

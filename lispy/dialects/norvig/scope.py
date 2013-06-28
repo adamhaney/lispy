@@ -8,11 +8,16 @@ class Scope(dict):
 
     def find(self, var):
         "Find the innermost Scope where var appears."
-
         # If ':' in var add module to environment
         if ":" in var:
+
             namespace, attribute = var.split(":")
-            module = importlib.import_module(namespace)
+
+            if "py" == namespace:
+                return {"py:{}".format(attribute): eval(attribute)}
+
+            else:
+                module = importlib.import_module(namespace)
 
             module_funcs = {
                 "{}:{}".format(namespace, k): attr
