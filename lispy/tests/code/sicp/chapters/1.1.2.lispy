@@ -1,0 +1,15 @@
+(define size 2)
+(print size)
+;; 2
+
+(print (* 5 size))
+;; 10
+
+(define pi 3.14159)
+(define radius 10)
+(print (* pi (* radius radius)))
+;; 314.159
+
+(define circumference (* 2 pi radius))
+(print circumference)
+;; 62.8318

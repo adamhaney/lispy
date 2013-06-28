@@ -47,19 +47,21 @@ class CommandlineTest(RuntimeTest):
         """
         self.assertEquals(lispy("-c (+ 2 2)"), "4\n")
 
-class SICPTest(RuntimeTest):
-    def test_sicp_examples(self):
-        """
-        Test all the files in the SICP code directory
-        """
+def check_expected(expected, actual):
+    assert expected == actual, "{} != {}".format(expected, actual)
 
-        chapters_dir = "{}/code/sicp/chapters".format(self.test_directory)
+def test_sicp_examples():
+    """
+    Test all the files in the SICP code directory
+    """
+    test_directory = os.path.dirname(os.path.realpath(__file__))
+    chapters_dir = "{}/code/sicp/chapters".format(test_directory)
 
-        for lispy_file in os.listdir(chapters_dir):
-            abs_script_path = "{}/{}".format(chapters_dir, lispy_file)
-            output = lispy("{}".format(abs_script_path))
-            comments = re.findall(";;.*", open(abs_script_path).read())
-            expected = map(lambda line: line.replace(";;", ""), comments)
+    for lispy_file in os.listdir(chapters_dir):
+        abs_script_path = "{}/{}".format(chapters_dir, lispy_file)
+        output = lispy("{}".format(abs_script_path))
+        comments = re.findall(";;.*", open(abs_script_path).read())
+        expected = map(lambda line: line.replace(";;", ""), comments)
 
-            for output, expected in zip(output.split('\n'), expected):
-                self.assertEquals(expected.strip(), output)
+        for output_line, expected in zip(output.split('\n'), expected):
+            yield check_expected, expected.strip(), output_line

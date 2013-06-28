@@ -71,14 +71,15 @@ class Runtime(object):
     def eval(self, str_):
         ## preprocess
 
-        # wrap everything in an implicit begin statement
-        str_ = "(begin {})".format(str_)
-
         # Remove hash comments so we can support hashbangs
         str_ = re.sub("\#.*", "\n", str_)
 
         # Remove lisp style comments
         str_ = re.sub(";.*", "\n", str_)
+
+        # wrap everything in an implicit begin statement
+        str_ = "(begin {})".format(str_)
+
 
         try:
             return eval(read(str_), env=self.global_env)
