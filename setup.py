@@ -10,6 +10,8 @@ setup(
     download_url='https://github.com/adamhaney/lispy',
     url='https://github.com/adamhaney/lispy',
     tests_require=[
+        'pep8',
+        'pyflakes',
         'nose==1.3.0',
         'sh==1.08'
     ],
