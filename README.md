@@ -39,5 +39,3 @@ additions to lispy to make it a toolkit for python developers who
 might be interested in dipping their toe in LISP. For functionality
 that's left to be implemented please check the issue tracker for the
 project at https://github.com/adamhaney/lispy/issues
-
-  - Implement reader macros
