@@ -74,8 +74,11 @@ class Runtime(object):
         # wrap everything in an implicit begin statement
         str_ = "(begin {})".format(str_)
 
-        # Remove comments
+        # Remove hash comments so we can support hashbangs
         str_ = re.sub("\#.*", "\n", str_)
+
+        # Remove lisp style comments
+        str_ = re.sub(";.*", "\n", str_)
 
         try:
             return eval(read(str_), env=self.global_env)
