@@ -10,7 +10,8 @@ setup(
     download_url='https://github.com/adamhaney/lispy',
     url='https://github.com/adamhaney/lispy',
     tests_require=[
-        'nose==1.3.0'
+        'nose==1.3.0',
+        'sh==1.08'
     ],
     test_suite='lispy.tests.tests',
     include_package_data=True,
