@@ -2,12 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name='lispy',
-    version='0.0.1',
+    version='0.0.2',
     description='A configurable LISP dialect that can call python code',
     long_description=open('README.md').read(),
     author='Adam Haney',
     author_email='adam.haney@akimbo.io',
     download_url='https://github.com/adamhaney/lispy',
+    url='https://github.com/adamhaney/lispy',
     tests_require=[
         'nose==1.3.0'
     ],
