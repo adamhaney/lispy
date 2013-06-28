@@ -17,11 +17,14 @@ def cli():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), default=None)
+    parser.add_argument('-c')
 
     args = parser.parse_args()
 
     if args.infile:
         Runtime().read_file(args.infile)
+    elif args.c:
+        print Runtime().eval(args.c)
     else:
         Runtime().repl()
 
