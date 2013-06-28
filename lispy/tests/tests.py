@@ -1,4 +1,6 @@
-from unittest2 import TestCase
+from unittest import TestCase
+
+from lispy.runtime import Runtime
 
 
 class SimpleTest(TestCase):
@@ -8,5 +10,11 @@ class SimpleTest(TestCase):
     def test_simple_addition(self):
         self.assertEquals(
             self.runtime.eval("(+ 2 2)"),
-            2
+            4
+        )
+
+    def test_simple_module_access(self):
+        import os
+        self.assertEquals(
+            self.runtime.eval("(list os:environ)"), [os.environ]
         )
