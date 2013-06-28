@@ -9,6 +9,7 @@ from __future__ import print_function
 import re
 import os
 import sys
+import cmd
 import traceback
 import argparse
 
@@ -25,6 +26,17 @@ def read(s):
 def to_string(exp):
     "Convert a Python object back into a Lisp-readable string."
     return '('+' '.join(map(to_string, exp))+')' if isinstance(exp, list) else str(exp)
+
+
+class Repl(cmd.Cmd):
+    prompt = "lispy> "
+
+    def __init__(self, runtime=None, *args, **kwargs):
+        self.runtime = runtime
+        cmd.Cmd.__init__(self, *args, **kwargs)
+
+    def default(self, line):
+        self.runtime.eval(line)
 
 
 class Runtime(object):
@@ -57,9 +69,7 @@ class Runtime(object):
 
     def repl(self, prompt='lis.py> '):
         "A prompt-read-eval-print loop"
-        while True:
-            val = self.eval(raw_input(prompt))
-            print(val)
+        Repl(runtime=self).cmdloop()
 
     def read_file(self, file):
         """
@@ -67,7 +77,7 @@ class Runtime(object):
         s-expressions) and evaluate them syncronously
         """
         return self.eval(file.read())
-        
+
     def eval(self, str_):
         ## preprocess
 
