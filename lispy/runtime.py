@@ -6,6 +6,7 @@ some code
 
 from __future__ import print_function
 
+import re
 import os
 import sys
 import traceback
@@ -68,6 +69,14 @@ class Runtime(object):
         return self.eval(file.read())
         
     def eval(self, str_):
+        ## preprocess
+
+        # wrap everything in an implicit begin statement
+        str_ = "(begin {})".format(str_)
+
+        # Remove comments
+        str_ = re.sub("\#.*", "\n", str_)
+
         try:
             return eval(read(str_), env=self.global_env)
         except Exception as e:

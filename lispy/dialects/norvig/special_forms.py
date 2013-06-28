@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import operator
 
@@ -31,5 +33,7 @@ SPECIAL_FORMS = {
     'null?':lambda x:x==[],
     'symbol?':lambda x: isa(x, Symbol),
     'true': True,
-    'false': False
+    'false': False,
+    'exit': exit,
+    'print': print
 }
