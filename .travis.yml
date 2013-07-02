@@ -3,14 +3,10 @@ python:
   - "2.7"
   - "3.2"
   - "3.3"
-  - "jython"
-before_install: if [ "$TRAVIS_PYTHON_VERSION" == "jython" ]; then sudo apt-get install jython; fi
- 
-before_script: if [ "$TRAVIS_PYTHON_VERSION" == "jython" ]; then export PYTHON_EXE=jython; jython -c "print ''"; else export PYTHON_EXE=python; fi
 
 script:
-  - $PYTHON_EXE setup.py install
+  - python setup.py install
   - pip install requirements.txt
   - pep8 .
   - pyflakes .
-  - $PYTHON_EXE setup.py nosetests
+  - python setup.py nosetests
