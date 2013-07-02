@@ -2,7 +2,7 @@ import json
 import re
 import os
 import doctest
-from StringIO import StringIO
+from io import StringIO
 from unittest import TestCase
 
 import sh

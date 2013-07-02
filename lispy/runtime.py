@@ -12,7 +12,7 @@ import sys
 import cmd
 import traceback
 import argparse
-from StringIO import StringIO
+from io import StringIO
 
 import lispy.dialects.haney.special_forms
 from lispy.dialects.norvig.scope import Scope, add_globals
@@ -105,4 +105,4 @@ class Runtime(object):
         """
         Evaluate a string as a lispy program and return its value
         """
-        return self.repl(None, InPort(StringIO(expression)), out, err, return_value=True)
+        return self.repl(None, InPort(StringIO(unicode(expression))), out, err, return_value=True)
