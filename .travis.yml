@@ -6,4 +6,5 @@ python:
 script:
   - pep8 .
   - pyflakes .
+  - python setup.py install
   - python setup.py nosetests
