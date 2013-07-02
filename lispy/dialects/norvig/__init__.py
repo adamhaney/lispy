@@ -7,7 +7,7 @@
 from __future__ import division
 import re
 import sys
-import StringIO
+from io import StringIO
 
 from .scope import Scope, add_globals
 from .symbols import *
@@ -27,7 +27,7 @@ def parse(inport):
     "Parse a program: read and expand/error-check it."
     # Backwards compatibility: given a str, convert it to an InPort
     if isinstance(inport, str):
-        inport = InPort(StringIO.StringIO(inport))
+        inport = InPort(StringIO(unicode(inport)))
 
     return expand(read(inport), toplevel=True)
 
