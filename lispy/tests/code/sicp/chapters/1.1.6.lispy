@@ -1,11 +1,11 @@
 (define abs (lambda (x)
               (if (< x 0) (* -1 x) x)))
 
-(print (abs -7))
+(display (abs -7))
 ;; 7
 
-(print (abs 0))
+(display (abs 0))
 ;; 0
 
-(print (abs 2))
+(display (abs 2))
 ;; 2

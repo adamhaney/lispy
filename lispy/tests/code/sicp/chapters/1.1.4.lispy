@@ -1,30 +1,30 @@
 (define square (lambda (x) (* x x)))
-(print (square 3))
+(display (square 3))
 ;; 9
 
-(print (square 21))
+(display (square 21))
 ;; 441
 
-(print (square (+ 2 5)))
+(display (square (+ 2 5)))
 ;; 49
 
-(print (square (square 3)))
+(display (square (square 3)))
 ;; 81
 
 (define x 2)
 (define y 3)
 
-(print (+ (square x) (square y)))
+(display (+ (square x) (square y)))
 ;; 13
 
 (define sum-of-squares (lambda (x y)
         (+ (square x) (square y))))
 
-(print (sum-of-squares 3 4))
+(display (sum-of-squares 3 4))
 ;; 25
 
 (define f (lambda (a)
         (sum-of-squares (+ a 1) (* a 2))))
 
-(print (f 5))
+(display (f 5))
 ;; 136

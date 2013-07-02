@@ -1,6 +1,8 @@
+import json
 import re
 import os
 import doctest
+from StringIO import StringIO
 from unittest import TestCase
 
 import sh
@@ -23,9 +25,9 @@ class SimpleEvaluationTest(RuntimeTest):
         )
 
     def test_simple_module_access(self):
-        import os
         self.assertEquals(
-            self.runtime.eval("(list os:environ)"), [os.environ]
+            self.runtime.eval("(list os:environ)"),
+            [os.environ]
         )
 
 
@@ -47,7 +49,8 @@ class CommandlineTest(RuntimeTest):
         """
         self.assertEquals(lispy("-c (+ 2 2)"), "4\n")
 
-def check_expected(expected, actual):
+def check_expected(filename, expected, actual):
+    print filename
     assert expected == actual, "{} != {}".format(expected, actual)
 
 def test_sicp_examples():
@@ -64,4 +67,4 @@ def test_sicp_examples():
         expected = map(lambda line: line.replace(";;", ""), comments)
 
         for output_line, expected in zip(output.split('\n'), expected):
-            yield check_expected, expected.strip(), output_line
+            yield check_expected, lispy_file, expected.strip(), output_line

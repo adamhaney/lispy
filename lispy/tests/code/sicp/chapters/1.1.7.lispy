@@ -21,35 +21,35 @@
 
 (define sqrt (lambda (x) (sqrt-iter 1.0 x)))
 
-(print (square 3))
+(display (square 3))
 ;; 9
 
-(print (abs -3))
+(display (abs -3))
 ;; 3
 
-(print (abs 0))
+(display (abs 0))
 ;; 0
 
-(print (abs 2))
+(display (abs 2))
 ;; 2
 
-(print (error 4 3))
+(display (error 4 3))
 ;; 1
 
-(print (error 3 4))
+(display (error 3 4))
 ;; 1
 
-(print (error 3 3.0001))
+(display (error 3 3.0001))
 ;; 0.0001
 
-(print (good-enough? 4 3))
-;; False
+(display (good-enough? 4 3))
+;; #f
 
-(print (good-enough? 3 9.0001))
-;; True
+(display (good-enough? 3 9.0001))
+;; #t
 
-(print (average 3 9))
+(display (average 3 9))
 ;; 6
 
-(print (sqrt 9))
+(display (sqrt 9))
 ;; 3.00009155413

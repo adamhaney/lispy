@@ -12,10 +12,12 @@ import sys
 import cmd
 import traceback
 import argparse
+from StringIO import StringIO
 
 import lispy.dialects.haney.special_forms
-from lispy.dialects.norvig import read_from, tokenize, eval
 from lispy.dialects.norvig.scope import Scope, add_globals
+from lispy.dialects.norvig import eval, InPort, parse
+from lispy.dialects.norvig import EOF_OBJECT
 
 
 def read(s):
@@ -67,32 +69,40 @@ class Runtime(object):
 
         self.global_env = add_globals(Scope(), special_forms=special_forms)
 
-    def repl(self, prompt='lis.py> '):
-        "A prompt-read-eval-print loop"
-        Repl(runtime=self).cmdloop()
+    def repl(self, prompt='lispy> ', inport=InPort(sys.stdin), out=sys.stdout, err=sys.stderr, return_value=False):
+        "A prompt-read-eval-print loop."
+        if out is None:
+            out = StringIO()
+
+        if err is None:
+            err = StringIO()
+
+        while True:
+            try:
+                if prompt:
+                    sys.stderr.write(prompt)
+                x = parse(inport)
+                if x is EOF_OBJECT:
+                    return
+                val = eval(x)
+                if val is not None and out and return_value is False:
+                    err.write(to_string(val) + "\n")
+                    err.flush()
+                elif return_value:
+                    return val
+            except Exception as e:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_exception(exc_type, exc_value, exc_traceback)
 
     def read_file(self, file):
         """
         grab the individual pieces of code from a file (the complete
         s-expressions) and evaluate them syncronously
         """
-        return self.eval(file.read())
+        self.repl(None, InPort(file), None)
 
-    def eval(self, str_):
-        ## preprocess
-
-        # Remove hash comments so we can support hashbangs
-        str_ = re.sub("\#.*", "\n", str_)
-
-        # Remove lisp style comments
-        str_ = re.sub(";.*", "\n", str_)
-
-        # wrap everything in an implicit begin statement
-        str_ = "(begin {})".format(str_)
-
-
-        try:
-            return eval(read(str_), env=self.global_env)
-        except Exception as e:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            traceback.print_exception(exc_type, exc_value, exc_traceback)
+    def eval(self, expression, out=None, err=None):
+        """
+        Evaluate a string as a lispy program and return its value
+        """
+        return self.repl(None, InPort(StringIO(expression)), out, err, return_value=True)
