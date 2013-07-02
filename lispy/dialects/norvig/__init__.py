@@ -1,4 +1,4 @@
-################ Scheme Interpreter in Python
+############### Scheme Interpreter in Python
 
 ## (c) Peter Norvig, 2010; See http://norvig.com/lispy2.html
 
@@ -6,7 +6,6 @@
 
 from __future__ import division
 import re
-import sys
 from io import StringIO
 
 from .scope import Scope, add_globals

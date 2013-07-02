@@ -2,6 +2,8 @@ import importlib
 
 from .symbols import Symbol
 from .special_forms import SPECIAL_FORMS
+from .parse import to_string
+
 
 class Scope(dict):
     "An environment: a dict of {'var':val} pairs, with an outer Env."

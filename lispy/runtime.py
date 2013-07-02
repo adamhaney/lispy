@@ -6,28 +6,17 @@ some code
 
 from __future__ import print_function
 
-import re
 import os
 import sys
 import cmd
 import traceback
-import argparse
 from io import StringIO
 
 import lispy.dialects.haney.special_forms
 from lispy.dialects.norvig.scope import Scope, add_globals
 from lispy.dialects.norvig import eval, InPort, parse
 from lispy.dialects.norvig import EOF_OBJECT
-
-
-def read(s):
-    "Read a Scheme expression from a string."
-    return read_from(tokenize(s))
-
-
-def to_string(exp):
-    "Convert a Python object back into a Lisp-readable string."
-    return '('+' '.join(map(to_string, exp))+')' if isinstance(exp, list) else str(exp)
+from lispy.dialects.norvig.parse import to_string
 
 
 class Repl(cmd.Cmd):
@@ -90,7 +79,7 @@ class Runtime(object):
                     err.flush()
                 elif return_value:
                     return val
-            except Exception as e:
+            except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback.print_exception(exc_type, exc_value, exc_traceback)
 
