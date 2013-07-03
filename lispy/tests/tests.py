@@ -201,6 +201,7 @@ type_errors = [
     ("(twice 2 2)", TypeError),
 ]
 
+
 def check_norvig_expected(x, expected, rt):
     try:
         result = rt.eval(x)
