@@ -106,7 +106,6 @@ class Runtime(object):
         if sys.version_info[0] < 3:
             expression = unicode(expression)
 
-
         return self.repl(
             None,
             InPort(StringIO(expression)),

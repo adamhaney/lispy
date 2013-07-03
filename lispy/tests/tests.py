@@ -25,7 +25,7 @@ class SimpleEvaluationTest(RuntimeTest):
 
     def test_simple_module_access(self):
         self.assertEquals(
-            self.runtime.eval("(list os:environ)"),
+            list(self.runtime.eval("(list os:environ)")),
             [os.environ]
         )
 

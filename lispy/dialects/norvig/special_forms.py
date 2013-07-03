@@ -10,6 +10,7 @@ if sys.version_info[0] > 2:
 else:
     division_function = operator.div
 
+
 def readchar(inport):
     "Read the next character from an input port."
     if inport.line != '':

@@ -14,6 +14,8 @@ from .symbols import *
 from .special_forms import is_pair, read, cons
 from .parse import to_string
 
+TOKEN_REGEX = r"""\s*(,@|[('`,)]|"(?:[\\].|[^\\"])*"|;.*|[^\s('"`,;)]*)(.*)"""
+
 
 class Procedure(object):
     "A user-defined Scheme procedure."
@@ -41,7 +43,7 @@ def parse(inport):
 
 class InPort(object):
     "An input port. Retains a line of chars."
-    tokenizer = r"""\s*(,@|[('`,)]|"(?:[\\].|[^\\"])*"|;.*|[^\s('"`,;)]*)(.*)"""
+    tokenizer = TOKEN_REGEX
 
     def __init__(self, file):
         self.file = file
