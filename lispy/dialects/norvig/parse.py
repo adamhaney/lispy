@@ -1,5 +1,6 @@
 from .symbols import Symbol
 
+
 def to_string(x):
     "Convert a Python object back into a Lisp-readable string."
     if x is True:
@@ -9,7 +10,7 @@ def to_string(x):
     elif isinstance(x, Symbol):
         return x
     elif isinstance(x, str):
-        return '"%s"' % x.encode('string_escape').replace('"',r'\"')
+        return '"%s"' % x.encode('string_escape').replace('"', r'\"')
     elif isinstance(x, list):
         return '('+' '.join(map(to_string, x))+')'
     elif isinstance(x, complex):

@@ -12,6 +12,7 @@ import argparse
 
 from .runtime import Runtime
 
+
 def cli():
     """
     The function that console_scripts points to for command line

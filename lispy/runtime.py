@@ -43,7 +43,8 @@ class Runtime(object):
         """
         Initialize a runtime context.
 
-        special_forms: should be a class that inherits from the dict module (or just be a dict)
+        special_forms: should be a class that inherits from the dict
+        module (or just be a dict)
 
         """
 
@@ -52,13 +53,21 @@ class Runtime(object):
         if special_forms is None:
             special_forms = os.environ.get("LISPY_SPECIAL_FORMS_CLASS")
             if special_forms is None:
-                special_forms = lispy.dialects.haney.special_forms.SPECIAL_FORMS
+                from lispy.dialects.haney.special_forms import SPECIAL_FORMS
+                special_forms = SPECIAL_FORMS
 
         self.special_forms = special_forms
 
         self.global_env = add_globals(Scope(), special_forms=special_forms)
 
-    def repl(self, prompt='lispy> ', inport=InPort(sys.stdin), out=sys.stdout, err=sys.stderr, return_value=False):
+    def repl(
+        self,
+        prompt='lispy> ',
+        inport=InPort(sys.stdin),
+        out=sys.stdout,
+        err=sys.stderr,
+        return_value=False
+    ):
         "A prompt-read-eval-print loop."
         if out is None:
             out = StringIO()
@@ -94,4 +103,10 @@ class Runtime(object):
         """
         Evaluate a string as a lispy program and return its value
         """
-        return self.repl(None, InPort(StringIO(unicode(expression))), out, err, return_value=True)
+        return self.repl(
+            None,
+            InPort(StringIO(unicode(expression))),
+            out,
+            err,
+            return_value=True
+        )

@@ -11,12 +11,13 @@ class Scope(dict):
         # Bind parm list to corresponding args, or single parm to list of args
         self.outer = outer
         if isinstance(parms, Symbol):
-            self.update({parms:list(args)})
+            self.update({parms: list(args)})
         else:
             if len(args) != len(parms):
                 raise TypeError('expected %s, given %s, '
                                 % (to_string(parms), to_string(args)))
-            self.update(zip(parms,args))
+            self.update(zip(parms, args))
+
     def find(self, var):
         "Find the innermost Env where var appears."
         if var in self:
@@ -45,6 +46,7 @@ class Scope(dict):
             raise LookupError(var)
         else:
             return self.outer.find(var)
+
 
 def add_globals(self, special_forms=None):
     "Add some Scheme standard procedures."

@@ -6,6 +6,7 @@ from sh import lispy
 
 from lispy.runtime import Runtime
 
+
 class RuntimeTest(TestCase):
     def setUp(self):
         self.runtime = Runtime()
@@ -34,6 +35,7 @@ class PythonBuiltinsTest(RuntimeTest):
             self.runtime.eval("(py:abs -7)"), 7
         )
 
+
 class CommandlineTest(RuntimeTest):
     """
     Test the options provided by lispy's cli using python's sh module
@@ -45,9 +47,11 @@ class CommandlineTest(RuntimeTest):
         """
         self.assertEquals(lispy("-c (+ 2 2)"), "4\n")
 
+
 def check_expected(filename, expected, actual):
     print filename
     assert expected == actual, "{} != {}".format(expected, actual)
+
 
 def test_sicp_examples():
     """
