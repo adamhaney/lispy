@@ -9,7 +9,7 @@ setup(
     author_email='adam.haney@akimbo.io',
     download_url='https://github.com/adamhaney/lispy',
     url='https://github.com/adamhaney/lispy',
-    tests_require=[
+    install_requires=[
         'pep8',
         'pyflakes',
         'nose==1.3.0',
@@ -24,5 +24,5 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     entry_points={'console_scripts': ['lispy=lispy:cli']},
-    packages=['lispy']
+    packages=find_packages()
 )

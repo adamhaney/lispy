@@ -12,11 +12,10 @@ import cmd
 import traceback
 from io import StringIO
 
-import lispy.dialects.haney.special_forms
-from lispy.dialects.norvig.scope import Scope, add_globals
-from lispy.dialects.norvig import eval, InPort, parse
-from lispy.dialects.norvig import EOF_OBJECT
-from lispy.dialects.norvig.parse import to_string
+from .dialects.norvig.scope import Scope, add_globals
+from .dialects.norvig import eval, InPort, parse
+from .dialects.norvig import EOF_OBJECT
+from .dialects.norvig.parse import to_string
 
 
 class Repl(cmd.Cmd):
@@ -49,11 +48,11 @@ class Runtime(object):
         """
 
         # spcial forms may be passed in, or read from the environment,
-        # by default they're the Haney combination of default dialects
+        # by default they're the norvig combination of default dialects
         if special_forms is None:
             special_forms = os.environ.get("LISPY_SPECIAL_FORMS_CLASS")
             if special_forms is None:
-                from lispy.dialects.haney.special_forms import SPECIAL_FORMS
+                from .dialects.norvig.special_forms import SPECIAL_FORMS
                 special_forms = SPECIAL_FORMS
 
         self.special_forms = special_forms
