@@ -4,6 +4,11 @@ import operator
 from .symbols import *
 from .parse import to_string
 
+# Python 3 gives us more fine grained division operators
+if sys.version_info[0] > 2:
+    division_function = operator.truediv
+else:
+    division_function = operator.div
 
 def readchar(inport):
     "Read the next character from an input port."
@@ -71,7 +76,7 @@ SPECIAL_FORMS = {
     '+': operator.add,
     '-': operator.sub,
     '*': lambda *args: reduce(operator.mul, args),
-    '/': operator.div,
+    '/': division_function,
     'not': operator.not_,
     '>': operator.gt,
     '<': operator.lt,
