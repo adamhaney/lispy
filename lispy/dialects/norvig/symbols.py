@@ -10,14 +10,20 @@ def Sym(s, symbol_table={}):
 
 EOF_OBJECT = Symbol('#<eof-object>')  # Note: uninterned; can't be read
 
-QUOTE_SYMBOL, IF_SYMBOL, SET_SYMBOL, DEFINE_SYMBOL, LAMBDA_SYMBOL, BEGIN_SYMBOL, DEFINEMACRO_SYMBOL, QUASIQUOTE_SYMBOL, UNQUOTE_SYMBOL, UNQUOTESPLICING_SYMBOL = map(
+SYMBOLS = {
+    str_.upper(): Sym(str_)
+    for str_
+    in ["quote", "if", "set!", "define", "lambda", "begin", "define-macro"]
+}
+
+QUASIQUOTE_SYMBOL, UNQUOTE_SYMBOL, UNQUOTESPLICING_SYMBOL = map(
     Sym,
-    "quote   if   set!  define   lambda   begin   define-macro quasiquote   unquote   unquote-splicing".split())
+    "quasiquote   unquote   unquote-splicing".split())
 
 APPEND_SYMBOL, CONS_SYMBOL, LET_SYMBOL = map(Sym, "append cons let".split())
 
 QUOTES = {
-    "'": QUOTE_SYMBOL,
+    "'": SYMBOLS["QUOTE"],
     "`": QUASIQUOTE_SYMBOL,
     ",": UNQUOTE_SYMBOL,
     ",@": UNQUOTESPLICING_SYMBOL

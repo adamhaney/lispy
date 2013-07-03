@@ -75,24 +75,24 @@ def eval(x, env=global_env):
             return env.find(x)[x]
         elif not isinstance(x, list):   # constant literal
             return x
-        elif x[0] is QUOTE_SYMBOL:     # (quote exp)
+        elif x[0] is SYMBOLS["QUOTE"]:     # (quote exp)
             (_, exp) = x
             return exp
-        elif x[0] is IF_SYMBOL:        # (if test conseq alt)
+        elif x[0] is SYMBOLS["IF"]:        # (if test conseq alt)
             (_, test, conseq, alt) = x
             x = (conseq if eval(test, env) else alt)
-        elif x[0] is SET_SYMBOL:       # (set! var exp)
+        elif x[0] is SYMBOLS["SET!"]:       # (set! var exp)
             (_, var, exp) = x
             env.find(var)[var] = eval(exp, env)
             return None
-        elif x[0] is DEFINE_SYMBOL:    # (define var exp)
+        elif x[0] is SYMBOLS["DEFINE"]:    # (define var exp)
             (_, var, exp) = x
             env[var] = eval(exp, env)
             return None
-        elif x[0] is LAMBDA_SYMBOL:    # (lambda (var*) exp)
+        elif x[0] is SYMBOLS["LAMBDA"]:    # (lambda (var*) exp)
             (_, vars, exp) = x
             return Procedure(vars, exp, env)
-        elif x[0] is BEGIN_SYMBOL:     # (begin exp+)
+        elif x[0] is SYMBOLS["BEGIN"]:     # (begin exp+)
             for exp in x[1:-1]:
                 eval(exp, env)
             x = x[-1]
@@ -113,50 +113,50 @@ def expand(x, toplevel=False):
     require(x, x != [])                    # () => Error
     if not isinstance(x, list):                 # constant => unchanged
         return x
-    elif x[0] is QUOTE_SYMBOL:                 # (quote exp)
+    elif x[0] is SYMBOLS["QUOTE"]:                 # (quote exp)
         require(x, len(x) == 2)
         return x
-    elif x[0] is IF_SYMBOL:
+    elif x[0] is SYMBOLS["IF"]:
         if len(x) == 3:
             x = x + [None]     # (if t c) => (if t c None)
         require(x, len(x) == 4)
         return map(expand, x)
-    elif x[0] is SET_SYMBOL:
+    elif x[0] is SYMBOLS["SET!"]:
         require(x, len(x) == 3)
         var = x[1]                       # (set! non-var exp) => Error
         require(x, isinstance(var, Symbol), "can set! only a symbol")
-        return [SET_SYMBOL, var, expand(x[2])]
-    elif x[0] is DEFINE_SYMBOL or x[0] is DEFINEMACRO_SYMBOL:
+        return [SYMBOLS["SET!"], var, expand(x[2])]
+    elif x[0] is SYMBOLS["DEFINE"] or x[0] is SYMBOLS["DEFINE-MACRO"]:
         require(x, len(x) >= 3)
         _def, v, body = x[0], x[1], x[2:]
         if isinstance(v, list) and v:           # (define (f args) body)
             f, args = v[0], v[1:]        # => (define f (lambda (args) body))
-            return expand([_def, f, [LAMBDA_SYMBOL, args]+body])
+            return expand([_def, f, [SYMBOLS["LAMBDA"], args]+body])
         else:
             require(x, len(x) == 3)        # (define non-var/list exp) => Error
             require(x, isinstance(v, Symbol), "can define only a symbol")
             exp = expand(x[2])
-            if _def is DEFINEMACRO_SYMBOL:
+            if _def is SYMBOLS["DEFINE-MACRO"]:
                 require(x, toplevel, "define-macro only allowed at top level")
                 proc = eval(exp)
                 require(x, callable(proc), "macro must be a procedure")
                 macro_table[v] = proc    # (define-macro v proc)
                 return None              # => None; add v:proc to macro_table
-            return [DEFINE_SYMBOL, v, exp]
-    elif x[0] is BEGIN_SYMBOL:
+            return [SYMBOLS["DEFINE"], v, exp]
+    elif x[0] is SYMBOLS["BEGIN"]:
         if len(x) == 1:
             return None        # (begin) => None
         else:
             return [expand(xi, toplevel) for xi in x]
-    elif x[0] is LAMBDA_SYMBOL:                # (lambda (x) e1 e2)
+    elif x[0] is SYMBOLS["LAMBDA"]:                # (lambda (x) e1 e2)
         require(x, len(x) >= 3)            # => (lambda (x) (begin e1 e2))
         vars, body = x[1], x[2:]
         require(x,
                 (isinstance(vars, list)
                  and all(isinstance(v, Symbol) for v in vars))
                 or isinstance(vars, Symbol), "illegal lambda argument list")
-        exp = body[0] if len(body) == 1 else [BEGIN_SYMBOL] + body
-        return [LAMBDA_SYMBOL, vars, expand(exp)]
+        exp = body[0] if len(body) == 1 else [SYMBOLS["BEGIN"]] + body
+        return [SYMBOLS["LAMBDA"], vars, expand(exp)]
     elif x[0] is QUASIQUOTE_SYMBOL:            # `x => expand_quasiquote(x)
         require(x, len(x) == 2)
         return expand_quasiquote(x[1])
@@ -175,7 +175,7 @@ def require(x, predicate, msg="wrong length"):
 def expand_quasiquote(x):
     """Expand `x => 'x; `,x => x; `(,@x y) => (append x y) """
     if not is_pair(x):
-        return [QUOTE_SYMBOL, x]
+        return [SYMBOLS["QUOTE"], x]
     require(x, x[0] is not UNQUOTESPLICING_SYMBOL, "can't splice here")
     if x[0] is UNQUOTE_SYMBOL:
         require(x, len(x) == 2)
@@ -196,7 +196,9 @@ def let(*args):
             isinstance(b, list) and len(b) == 2 and isinstance(b[0], Symbol)
             for b in bindings), "illegal binding list")
     vars, vals = zip(*bindings)
-    return [[LAMBDA_SYMBOL, list(vars)]+map(expand, body)] + map(expand, vals)
+    return [
+        [SYMBOLS["LAMBDA"],
+         list(vars)]+map(expand, body)] + map(expand, vals)
 
 macro_table = {LET_SYMBOL: let}  # More macros can go here
 
