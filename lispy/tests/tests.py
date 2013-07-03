@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import re
 import os
 from unittest import TestCase
@@ -49,7 +51,7 @@ class CommandlineTest(RuntimeTest):
 
 
 def check_expected(filename, expected, actual):
-    print filename
+    print(filename)
     assert expected == actual, "{} != {}".format(expected, actual)
 
 
