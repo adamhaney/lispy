@@ -184,7 +184,11 @@ def expand_quasiquote(x):
         require(x[0], len(x[0]) == 2)
         return [SYMBOLS["APPEND"], x[0][1], expand_quasiquote(x[1:])]
     else:
-        return [SYMBOLS["CONS"], expand_quasiquote(x[0]), expand_quasiquote(x[1:])]
+        return [
+            SYMBOLS["CONS"],
+            expand_quasiquote(x[0]),
+            expand_quasiquote(x[1:])
+        ]
 
 
 def let(*args):

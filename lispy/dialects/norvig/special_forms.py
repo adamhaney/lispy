@@ -1,7 +1,7 @@
 import sys
 import operator
 
-from .symbols import *
+from .symbols import QUOTES, EOF_OBJECT, atom, Symbol
 from .parse import to_string
 
 # Python 3 gives us more fine grained division operators
