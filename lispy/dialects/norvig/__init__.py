@@ -6,6 +6,7 @@
 
 from __future__ import division
 import re
+import sys
 from io import StringIO
 
 from .scope import Scope, add_globals
@@ -30,7 +31,10 @@ def parse(inport):
     "Parse a program: read and expand/error-check it."
     # Backwards compatibility: given a str, convert it to an InPort
     if isinstance(inport, str):
-        inport = InPort(StringIO(unicode(inport)))
+        if sys.version_info[0] < 3:
+            inport = unicode(inport)
+
+        inport = InPort(StringIO(inport))
 
     return expand(read(inport), toplevel=True)
 
