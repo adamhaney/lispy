@@ -10,7 +10,7 @@ import sys
 from io import StringIO
 
 from .scope import Scope, add_globals
-from .symbols import *
+from .symbols import Symbol, SYMBOLS, EOF_OBJECT
 from .special_forms import is_pair, read, cons
 from .parse import to_string
 
@@ -157,7 +157,7 @@ def expand(x, toplevel=False):
                 or isinstance(vars, Symbol), "illegal lambda argument list")
         exp = body[0] if len(body) == 1 else [SYMBOLS["BEGIN"]] + body
         return [SYMBOLS["LAMBDA"], vars, expand(exp)]
-    elif x[0] is QUASIQUOTE_SYMBOL:            # `x => expand_quasiquote(x)
+    elif x[0] is SYMBOLS["QUASIQUOTE"]:            # `x => expand_quasiquote(x)
         require(x, len(x) == 2)
         return expand_quasiquote(x[1])
     elif isinstance(x[0], Symbol) and x[0] in macro_table:
@@ -176,20 +176,20 @@ def expand_quasiquote(x):
     """Expand `x => 'x; `,x => x; `(,@x y) => (append x y) """
     if not is_pair(x):
         return [SYMBOLS["QUOTE"], x]
-    require(x, x[0] is not UNQUOTESPLICING_SYMBOL, "can't splice here")
-    if x[0] is UNQUOTE_SYMBOL:
+    require(x, x[0] is not SYMBOLS["UNQUOTE-SPLICING"], "can't splice here")
+    if x[0] is SYMBOLS["UNQUOTE"]:
         require(x, len(x) == 2)
         return x[1]
-    elif is_pair(x[0]) and x[0][0] is UNQUOTESPLICING_SYMBOL:
+    elif is_pair(x[0]) and x[0][0] is SYMBOLS["UNQUOTE-SPLICING"]:
         require(x[0], len(x[0]) == 2)
-        return [APPEND_SYMBOL, x[0][1], expand_quasiquote(x[1:])]
+        return [SYMBOLS["APPEND"], x[0][1], expand_quasiquote(x[1:])]
     else:
-        return [CONS_SYMBOL, expand_quasiquote(x[0]), expand_quasiquote(x[1:])]
+        return [SYMBOLS["CONS"], expand_quasiquote(x[0]), expand_quasiquote(x[1:])]
 
 
 def let(*args):
     args = list(args)
-    x = cons(LET_SYMBOL, args)
+    x = cons(SYMBOLS["LET"], args)
     require(x, len(args) > 1)
     bindings, body = args[0], args[1:]
     require(x, all(
@@ -200,7 +200,7 @@ def let(*args):
         [SYMBOLS["LAMBDA"],
          list(vars)]+map(expand, body)] + map(expand, vals)
 
-macro_table = {LET_SYMBOL: let}  # More macros can go here
+macro_table = {SYMBOLS["LET"]: let}  # More macros can go here
 
 eval(parse("""(begin
 (define-macro and (lambda args

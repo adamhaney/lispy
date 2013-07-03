@@ -13,20 +13,28 @@ EOF_OBJECT = Symbol('#<eof-object>')  # Note: uninterned; can't be read
 SYMBOLS = {
     str_.upper(): Sym(str_)
     for str_
-    in ["quote", "if", "set!", "define", "lambda", "begin", "define-macro"]
+    in [
+        "quote",
+        "if",
+        "set!",
+        "define",
+        "lambda",
+        "begin",
+        "define-macro",
+        "quasiquote",
+        "unquote",
+        "unquote-splicing",
+        "append",
+        "cons",
+        "let"
+    ]
 }
-
-QUASIQUOTE_SYMBOL, UNQUOTE_SYMBOL, UNQUOTESPLICING_SYMBOL = map(
-    Sym,
-    "quasiquote   unquote   unquote-splicing".split())
-
-APPEND_SYMBOL, CONS_SYMBOL, LET_SYMBOL = map(Sym, "append cons let".split())
 
 QUOTES = {
     "'": SYMBOLS["QUOTE"],
-    "`": QUASIQUOTE_SYMBOL,
-    ",": UNQUOTE_SYMBOL,
-    ",@": UNQUOTESPLICING_SYMBOL
+    "`": SYMBOLS["QUASIQUOTE"],
+    ",": SYMBOLS["UNQUOTE"],
+    ",@": SYMBOLS["UNQUOTE-SPLICING"]
 }
 
 
