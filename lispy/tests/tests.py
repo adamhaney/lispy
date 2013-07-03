@@ -5,6 +5,8 @@ import os
 from unittest import TestCase
 from inspect import isclass
 
+from nose.tools import raises
+
 from lispy.runtime import Runtime
 from lispy.dialects.norvig import to_string
 
@@ -119,18 +121,8 @@ lis_tests = [
 ]
 
 lispy_tests = [
-    ("()", SyntaxError),
-    ("(set! x)", SyntaxError),
-    ("(define 3 4)", SyntaxError),
-    ("(quote 1 2)", SyntaxError),
-    ("(if 1 2 3 4)", SyntaxError),
-    ("(lambda 3 3)", SyntaxError),
-    ("(lambda (x))", SyntaxError),
-    ("""(if (= 1 2) (define-macro a 'a)
-     (define-macro a 'b))""", SyntaxError),
     ("(define (twice x) (* 2 x))", None),
     ("(twice 2)", 4),
-    ("(twice 2 2)", TypeError),
     ("(define lyst (lambda items items))", None),
     ("(lyst 1 2 3 (+ 2 2))", [1, 2, 3, 4]),
     ("(if 1 2)", 2),
@@ -146,7 +138,7 @@ lispy_tests = [
     (newton 1 (lambda (x) (- (* x x) a)) (lambda (x) (* 2 x)) 1e-8))""", None),
     ("(> (square-root 200.) 14.14213)", True),
     ("(< (square-root 200.) 14.14215)", True),
-    ("(= (square-root 200.) (sqrt 200.))", True),
+    ("(= (square-root 200.) (math:sqrt 200.))", True),
     ("""(define (sum-squares-range start end)
          (define (sumsq-acc start end acc)
             (if
@@ -168,9 +160,8 @@ lispy_tests = [
     ("""(call/cc (lambda (throw)
          (+ 5 (* 10 (call/cc (lambda (escape) (* 100 1))))))) ; 0 levels""",
      1005),
-    ("(* 1i 1i)", -1), ("(sqrt -1)", 1j),
+    ("(* 1i 1i)", -1), ("(cmath:sqrt -1)", 1j),
     ("(let ((a 1) (b 2)) (+ a b))", 3),
-    ("(let ((a 1) (b 2 3)) (+ a b))", SyntaxError),
     ("(and 1 2 3)", 3), ("(and (> 2 1) 2 3)", 3), ("(and)", True),
     ("(and (> 2 1) (> 2 3))", False),
     ("""(define-macro unless
@@ -186,13 +177,29 @@ lispy_tests = [
     ("(define L (list 1 2 3))", None),
     ("`(testing ,@L testing)", ['testing', 1, 2, 3, 'testing']),
     ("`(testing ,L testing)", ['testing', [1, 2, 3], 'testing']),
-    ("`,@L", SyntaxError),
     ("""'(1 ;test comments '
      ;skip this line
      2 ; more ; comments ; ) )
      3) ; final comment""", [1, 2, 3]),
 ]
 
+syntax_errors = [
+    ("`,@L", SyntaxError),
+    ("(let ((a 1) (b 2 3)) (+ a b))", SyntaxError),
+    ("()", SyntaxError),
+    ("(set! x)", SyntaxError),
+    ("(define 3 4)", SyntaxError),
+    ("(quote 1 2)", SyntaxError),
+    ("(if 1 2 3 4)", SyntaxError),
+    ("(lambda 3 3)", SyntaxError),
+    ("(lambda (x))", SyntaxError),
+    ("""(if (= 1 2) (define-macro a 'a)
+     (define-macro a 'b))""", SyntaxError),
+]
+
+type_errors = [
+    ("(twice 2 2)", TypeError),
+]
 
 def check_norvig_expected(x, expected, rt):
     try:
@@ -205,7 +212,7 @@ def check_norvig_expected(x, expected, rt):
         assert isinstance(e, expected)
 
 
-def norvig_suite_test(name=''):
+def norvig_suite_test():
     tests = lis_tests + lispy_tests
 
     "For each (exp, expected) test case, see if eval(parse(exp)) == expected."
@@ -214,3 +221,27 @@ def norvig_suite_test(name=''):
 
     for (x, expected) in tests:
         yield check_norvig_expected, x, expected, rt
+
+
+@raises(SyntaxError)
+def check_for_syntax_error(expression, rt):
+    val = rt.eval(expression)
+
+
+def norvig_test_syntax_errors():
+    rt = Runtime()
+
+    for syntax_error_case in syntax_errors:
+        yield check_for_syntax_error, syntax_error_case[0], rt
+
+
+@raises(TypeError)
+def check_for_type_error(expression, rt):
+    val = rt.eval(expression)
+
+
+def norvig_test_type_errors():
+    rt = Runtime()
+
+    for type_error_case in type_errors:
+        yield check_for_type_error, type_error_case[0], rt

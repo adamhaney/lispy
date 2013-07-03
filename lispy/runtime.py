@@ -65,7 +65,8 @@ class Runtime(object):
         inport=InPort(sys.stdin),
         out=sys.stdout,
         err=sys.stderr,
-        return_value=False
+        return_value=False,
+        catch_exceptions=True
     ):
         "A prompt-read-eval-print loop."
         if out is None:
@@ -87,9 +88,12 @@ class Runtime(object):
                     err.flush()
                 elif return_value:
                     return val
-            except Exception:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                traceback.print_exception(exc_type, exc_value, exc_traceback)
+            except Exception as e:
+                if catch_exceptions:
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    traceback.print_exception(exc_type, exc_value, exc_traceback)
+                else:
+                    raise e
 
     def read_file(self, file):
         """
@@ -111,5 +115,6 @@ class Runtime(object):
             InPort(StringIO(expression)),
             out,
             err,
-            return_value=True
+            return_value=True,
+            catch_exceptions=False
         )
