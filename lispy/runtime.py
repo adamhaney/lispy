@@ -102,9 +102,14 @@ class Runtime(object):
         """
         Evaluate a string as a lispy program and return its value
         """
+        # conditionally unicode the expression for python 3 compatibility
+        if sys.version_info[0] < 3:
+            expression = unicode(expression)
+
+
         return self.repl(
             None,
-            InPort(StringIO(unicode(expression))),
+            InPort(StringIO(expression)),
             out,
             err,
             return_value=True
