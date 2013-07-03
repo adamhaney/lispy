@@ -7,6 +7,6 @@ python:
 script:
   - python setup.py install
   - pip install requirements.txt
-  - pep8 .
-  - pyflakes .
+#  - pep8 .
+#  - pyflakes .
   - python setup.py nosetests
