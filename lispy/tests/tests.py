@@ -2,9 +2,9 @@ import re
 import os
 from unittest import TestCase
 
-from sh import lispy
-
 from lispy.runtime import Runtime
+
+from sh import lispy
 
 
 class RuntimeTest(TestCase):
