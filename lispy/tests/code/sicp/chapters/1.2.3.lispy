@@ -1,0 +1,4 @@
+(define (cube x) (* x x x))
+
+(display (cube 3))
+;; 27

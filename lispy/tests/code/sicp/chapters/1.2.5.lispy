@@ -1,0 +1,7 @@
+(define (gcd a b)
+      (if (= b 0)
+          a
+          (gcd b (operator:mod a b))))
+
+(display (gcd 6 12))
+;; 6

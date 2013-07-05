@@ -6,26 +6,16 @@ some code
 
 from __future__ import print_function
 
-import re
 import os
 import sys
 import cmd
 import traceback
-import argparse
+from io import StringIO
 
-import lispy.dialects.haney.special_forms
-from lispy.dialects.norvig import read_from, tokenize, eval
-from lispy.dialects.norvig.scope import Scope, add_globals
-
-
-def read(s):
-    "Read a Scheme expression from a string."
-    return read_from(tokenize(s))
-
-
-def to_string(exp):
-    "Convert a Python object back into a Lisp-readable string."
-    return '('+' '.join(map(to_string, exp))+')' if isinstance(exp, list) else str(exp)
+from .dialects.norvig.scope import Scope, add_globals
+from .dialects.norvig import eval, InPort, parse
+from .dialects.norvig import EOF_OBJECT
+from .dialects.norvig.parse import to_string
 
 
 class Repl(cmd.Cmd):
@@ -52,47 +42,83 @@ class Runtime(object):
         """
         Initialize a runtime context.
 
-        special_forms: should be a class that inherits from the dict module (or just be a dict)
+        special_forms: should be a class that inherits from the dict
+        module (or just be a dict)
 
         """
 
         # spcial forms may be passed in, or read from the environment,
-        # by default they're the Haney combination of default dialects
+        # by default they're the norvig combination of default dialects
         if special_forms is None:
             special_forms = os.environ.get("LISPY_SPECIAL_FORMS_CLASS")
             if special_forms is None:
-                special_forms = lispy.dialects.haney.special_forms.SPECIAL_FORMS
+                from .dialects.norvig.special_forms import SPECIAL_FORMS
+                special_forms = SPECIAL_FORMS
 
         self.special_forms = special_forms
 
         self.global_env = add_globals(Scope(), special_forms=special_forms)
 
-    def repl(self, prompt='lis.py> '):
-        "A prompt-read-eval-print loop"
-        Repl(runtime=self).cmdloop()
+    def repl(
+        self,
+        prompt='lispy> ',
+        inport=InPort(sys.stdin),
+        out=sys.stdout,
+        err=sys.stderr,
+        return_value=False,
+        catch_exceptions=True
+    ):
+        "A prompt-read-eval-print loop."
+        if out is None:
+            out = StringIO()
+
+        if err is None:
+            err = StringIO()
+
+        while True:
+            try:
+                if prompt:
+                    sys.stderr.write(prompt)
+                x = parse(inport)
+                if x is EOF_OBJECT:
+                    return
+                val = eval(x)
+                if val is not None and out and return_value is False:
+                    err.write(to_string(val) + "\n")
+                    err.flush()
+                elif return_value:
+                    return val
+            except Exception as e:
+                if catch_exceptions:
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    traceback.print_exception(
+                        exc_type,
+                        exc_value,
+                        exc_traceback
+                    )
+                else:
+                    raise e
 
     def read_file(self, file):
         """
         grab the individual pieces of code from a file (the complete
         s-expressions) and evaluate them syncronously
         """
-        return self.eval(file.read())
+        self.repl(None, InPort(file), None)
 
-    def eval(self, str_):
-        ## preprocess
+    def eval(self, expression, out=None, err=None):
+        """
+        Evaluate a string as a lispy program and return its value
+        """
+        # conditionally unicode the expression for python 3 compatibility
+        if sys.version_info[0] < 3:
+            expression = unicode(expression)
 
-        # Remove hash comments so we can support hashbangs
-        str_ = re.sub("\#.*", "\n", str_)
-
-        # Remove lisp style comments
-        str_ = re.sub(";.*", "\n", str_)
-
-        # wrap everything in an implicit begin statement
-        str_ = "(begin {})".format(str_)
-
-
-        try:
-            return eval(read(str_), env=self.global_env)
-        except Exception as e:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            traceback.print_exception(exc_type, exc_value, exc_traceback)
+        return self.repl(
+            None,
+            InPort(StringIO(expression)),
+            out,
+            err,
+            return_value=True,
+            catch_exceptions=False
+        )

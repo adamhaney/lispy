@@ -116,3 +116,14 @@ additions to lispy to make it a toolkit for python developers who
 might be interested in dipping their toe in LISP. For functionality
 that's left to be implemented please check the issue tracker for the
 project at https://github.com/adamhaney/lispy/issues
+
+Anti-Goals
+----------
+
+There are a few things this project is not aiming to achieve. While I
+do want lispy to be able to run in python 2.x and 3.x I do not intend
+to mask some of the differences between 2.x and 3.x namely the
+different ways the two python branches handle math (in 2.x integer
+division returns a truncated value, in 3.x it returns a float). Trying
+to translate between these two design decisions is outside the scope
+of this project.

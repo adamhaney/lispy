@@ -3,7 +3,9 @@ python:
   - "2.7"
   - "3.2"
   - "3.3"
+
 script:
+  - python setup.py install
   - pep8 .
-  - pyflakes .
+#  - pyflakes .
   - python setup.py nosetests
