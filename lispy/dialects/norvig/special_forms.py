@@ -1,5 +1,6 @@
 import sys
 import operator
+from functools import reduce
 
 from .symbols import QUOTES, EOF_OBJECT, atom, Symbol
 from .parse import to_string
