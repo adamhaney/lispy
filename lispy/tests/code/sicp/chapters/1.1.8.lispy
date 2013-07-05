@@ -11,5 +11,5 @@
             guess
             (sqrt-iter (improve guess))))
       (sqrt-iter 1.0))
-(display (sqrt 9))
-;; 3.00009155413
+(display (py:int (sqrt 9)))
+;; 3

@@ -39,9 +39,6 @@
 (display (error 3 4))
 ;; 1
 
-(display (error 3 3.0001))
-;; 0.0001
-
 (display (good-enough? 4 3))
 ;; #f
 
@@ -51,5 +48,5 @@
 (display (average 3.0 9))
 ;; 6.0
 
-(display (sqrt 9))
-;; 3.00009155413
+(display (py:int (sqrt 9)))
+;; 3
