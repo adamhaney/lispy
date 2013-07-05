@@ -1,3 +1,5 @@
+import six
+
 class Symbol(str):
     pass
 
@@ -48,7 +50,10 @@ def atom(token):
     elif token == '#f':
         return False
     elif token[0] == '"':
-        return token[1:-1].decode('string_escape')
+        if six.PY3:
+            return token[1:-1]
+        else:
+            return token[1:-1].decode('string_escape')
     try:
         return int(token)
     except ValueError:
