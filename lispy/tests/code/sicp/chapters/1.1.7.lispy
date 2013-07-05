@@ -48,8 +48,8 @@
 (display (good-enough? 3 9.0001))
 ;; #t
 
-(display (average 3 9))
-;; 6
+(display (average 3.0 9))
+;; 6.0
 
 (display (sqrt 9))
 ;; 3.00009155413
