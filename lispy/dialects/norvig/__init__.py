@@ -202,7 +202,7 @@ def let(*args):
     vars, vals = zip(*bindings)
     return [
         [SYMBOLS["LAMBDA"],
-         list(vars)]+ list(map(expand, body))] + list(map(expand, vals))
+         list(vars)] + list(map(expand, body))] + list(map(expand, vals))
 
 macro_table = {SYMBOLS["LET"]: let}  # More macros can go here
 
