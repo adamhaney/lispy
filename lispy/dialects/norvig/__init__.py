@@ -120,7 +120,7 @@ def expand(x, toplevel=False):
         if len(x) == 3:
             x = x + [None]     # (if t c) => (if t c None)
         require(x, len(x) == 4)
-        return map(expand, x)
+        return list(map(expand, x))
     elif x[0] is SYMBOLS["SET!"]:
         require(x, len(x) == 3)
         var = x[1]                       # (set! non-var exp) => Error
@@ -163,7 +163,7 @@ def expand(x, toplevel=False):
     elif isinstance(x[0], Symbol) and x[0] in macro_table:
         return expand(macro_table[x[0]](*x[1:]), toplevel)  # (m arg...)
     else:                                # => macroexpand if m isinstance macro
-        return map(expand, x)            # (f arg...) => expand each
+        return list(map(expand, x))            # (f arg...) => expand each
 
 
 def require(x, predicate, msg="wrong length"):
@@ -202,7 +202,7 @@ def let(*args):
     vars, vals = zip(*bindings)
     return [
         [SYMBOLS["LAMBDA"],
-         list(vars)]+map(expand, body)] + map(expand, vals)
+         list(vars)]+ list(map(expand, body))] + list(map(expand, vals))
 
 macro_table = {SYMBOLS["LET"]: let}  # More macros can go here
 

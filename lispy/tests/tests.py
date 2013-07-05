@@ -70,7 +70,7 @@ def test_sicp_examples():
         abs_script_path = "{}/{}".format(chapters_dir, lispy_file)
         output = lispy("{}".format(abs_script_path))
         comments = re.findall(";;.*", open(abs_script_path).read())
-        expected = map(lambda line: line.replace(";;", ""), comments)
+        expected = list(map(lambda line: line.replace(";;", ""), comments))
 
         for output_line, expected in zip(output.split('\n'), expected):
             yield check_expected, lispy_file, expected.strip(), output_line

@@ -12,7 +12,7 @@ def to_string(x):
     elif isinstance(x, str):
         return '"%s"' % x.encode('string_escape').replace('"', r'\"')
     elif isinstance(x, list):
-        return '('+' '.join(map(to_string, x))+')'
+        return '('+' '.join(list(map(to_string, x)))+')'
     elif isinstance(x, complex):
         return str(x).replace('j', 'i')
     else:
