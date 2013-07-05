@@ -9,6 +9,8 @@ import re
 import sys
 from io import StringIO
 
+import six
+
 from .scope import Scope, add_globals
 from .symbols import Symbol, SYMBOLS, EOF_OBJECT
 from .special_forms import is_pair, read, cons
@@ -33,10 +35,7 @@ def parse(inport):
     "Parse a program: read and expand/error-check it."
     # Backwards compatibility: given a str, convert it to an InPort
     if isinstance(inport, str):
-        if sys.version_info[0] < 3:
-            inport = unicode(inport)
-
-        inport = InPort(StringIO(inport))
+        inport = InPort(StringIO(six.u(inport)))
 
     return expand(read(inport), toplevel=True)
 
