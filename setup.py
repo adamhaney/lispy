@@ -13,7 +13,8 @@ setup(
         'pep8',
         'pyflakes',
         'nose==1.3.0',
-        'sh==1.08'
+        'sh==1.08',
+        'six'
     ],
     test_suite='lispy.tests.tests',
     include_package_data=True,
